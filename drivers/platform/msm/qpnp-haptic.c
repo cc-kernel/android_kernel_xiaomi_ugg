@@ -1409,12 +1409,14 @@ static ssize_t qpnp_hap_vmax_mv_store(struct device *dev,
 	if (sscanf(buf, "%d", &data) != 1)
 		return -EINVAL;
 
-	if (data < QPNP_HAP_VMAX_MIN_MV) {
-		pr_err("%s: mv %d not in range (%d - %d), using min.", __func__, data, QPNP_HAP_VMAX_MIN_MV, QPNP_HAP_VMAX_MAX_MV);
-		data = QPNP_HAP_VMAX_MIN_MV;
-	} else if (data > QPNP_HAP_VMAX_MAX_MV) {
-		pr_err("%s: mv %d not in range (%d - %d), using max.", __func__, data, QPNP_HAP_VMAX_MIN_MV, QPNP_HAP_VMAX_MAX_MV);
-		data = QPNP_HAP_VMAX_MAX_MV;
+	if (data < hap->vtg_min) {
+		pr_err("%s: mv %d not in range (%d - %d), using min.", __func__, data,
+				hap->vtg_min, hap->vtg_max);
+		data = hap->vtg_min;
+	} else if (data > hap->vtg_max) {
+		pr_err("%s: mv %d not in range (%d - %d), using max.", __func__, data,
+				hap->vtg_min, hap->vtg_max);
+		data = hap->vtg_max;
 	}
 
 	hap->vmax_mv = data;
@@ -1505,9 +1507,18 @@ static struct device_attribute qpnp_hap_attrs[] = {
 	__ATTR(min_max_test, (S_IRUGO | S_IWUSR | S_IWGRP),
 			qpnp_hap_min_max_test_data_show,
 			qpnp_hap_min_max_test_data_store),
-	__ATTR(vmax_mv, (S_IRUGO | S_IWUSR | S_IWGRP),
+	__ATTR(vtg_level, (S_IRUGO | S_IWUSR | S_IWGRP),
 			qpnp_hap_vmax_mv_show,
 			qpnp_hap_vmax_mv_store),
+	__ATTR(vtg_min, S_IRUGO,
+			qpnp_hap_min_show,
+			NULL),
+	__ATTR(vtg_max, S_IRUGO,
+			qpnp_hap_max_show,
+			NULL),
+	__ATTR(vtg_default, S_IRUGO,
+			qpnp_hap_default_show,
+			NULL),
 };
 
 static int calculate_lra_code(struct qpnp_hap *hap)
