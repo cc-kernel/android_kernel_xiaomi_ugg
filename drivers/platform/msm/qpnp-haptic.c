@@ -1833,7 +1833,9 @@ static void qpnp_hap_td_enable(struct timed_output_dev *dev, int value)
 	spin_lock(&hap->td_lock);
 	hap->td_value = value;
 	spin_unlock(&hap->td_lock);
-
+	if (hap->play_mode == QPNP_HAP_DIRECT)
+		qpnp_hap_set(hap, hap->state);
+	else
 	schedule_work(&hap->td_work);
 }
 
