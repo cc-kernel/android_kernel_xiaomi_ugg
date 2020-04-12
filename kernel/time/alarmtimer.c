@@ -57,7 +57,7 @@ static struct wakeup_source *ws;
 static struct rtc_timer		rtctimer;
 static struct rtc_device	*rtcdev;
 static DEFINE_SPINLOCK(rtcdev_lock);
-
+static struct mutex power_on_alarm_lock;
 
 /**
  * set_power_on_alarmExt - set power on alarm value into rtc register
