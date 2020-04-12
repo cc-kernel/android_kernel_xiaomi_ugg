@@ -65,19 +65,6 @@ int download_mode = 0;
 static const int download_mode;
 #endif
 
-static int in_panic;
-
-static int panic_prep_restart(struct notifier_block *this,
-			      unsigned long event, void *ptr)
-{
-	in_panic = 1;
-	return NOTIFY_DONE;
-}
-
-static struct notifier_block panic_blk = {
-	.notifier_call	= panic_prep_restart,
-};
-
 #ifdef CONFIG_MSM_DLOAD_MODE
 #define EDL_MODE_PROP "qcom,msm-imem-emergency_download_mode"
 #define DL_MODE_PROP "qcom,msm-imem-download_mode"
@@ -107,6 +94,17 @@ struct reset_attribute {
 
 module_param_call(download_mode, dload_set, param_get_int,
 			&download_mode, 0644);
+
+static int panic_prep_restart(struct notifier_block *this,
+			      unsigned long event, void *ptr)
+{
+	in_panic = 1;
+	return NOTIFY_DONE;
+}
+
+static struct notifier_block panic_blk = {
+	.notifier_call	= panic_prep_restart,
+};
 
 int scm_set_dload_mode(int arg1, int arg2)
 {
@@ -311,16 +309,6 @@ static void msm_restart_prepare(const char *cmd)
 			qpnp_pon_set_restart_reason(
 				PON_RESTART_REASON_BOOTLOADER);
 			__raw_writel(0x77665500, restart_reason);
-#ifdef CONFIG_MACH_LENOVO_KUNTAO
-			/* set reboot_bl flag in PMIC for cold reset */
-			qpnp_pon_store_extra_reset_info(RESET_EXTRA_REBOOT_BL_REASON,
-				RESET_EXTRA_REBOOT_BL_REASON);
-			/*
-			 * force cold reboot here to avoid impaction from
-			 * modem double reboot workaround solution.
-			 */
-			qpnp_pon_system_pwr_off(PON_POWER_OFF_HARD_RESET);
-#endif
 		} else if (!strncmp(cmd, "recovery", 8)) {
 			qpnp_pon_set_restart_reason(
 				PON_RESTART_REASON_RECOVERY);
