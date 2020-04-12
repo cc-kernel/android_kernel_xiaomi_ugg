@@ -1,4 +1,5 @@
-/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
+/* Copyright (C) 2013 by Xiang Xiao <xiaoxiang@xiaomi.com>
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -10,12 +11,16 @@
  * GNU General Public License for more details.
  */
 
-#ifndef __UAPI_MSM_JPEG_DMA__
-#define __UAPI_MSM_JPEG_DMA__
+#ifndef __PWM_IR_H__
+#define __PWM_IR_H__
 
-#include <linux/videodev2.h>
+#define PWM_IR_NAME	"pwm-ir"
 
-/* msm jpeg dma control ID's */
-#define V4L2_CID_JPEG_DMA_SPEED (V4L2_CID_PRIVATE_BASE)
+struct pwm_ir_data {
+	const char  *reg_id;
+	int          pwm_id;
+	bool         low_active;
+	bool         use_timer;
+};
 
-#endif /* __UAPI_MSM_JPEG_DMA__ */
+#endif
