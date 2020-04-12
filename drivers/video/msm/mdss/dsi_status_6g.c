@@ -42,6 +42,9 @@ static bool mdss_check_te_status(struct mdss_dsi_ctrl_pdata *ctrl_pdata,
 			msecs_to_jiffies(interval));
 	disable_irq(gpio_to_irq(ctrl_pdata->disp_te_gpio));
 	pr_debug("%s: Panel TE check done with ret = %d\n", __func__, ret);
+	if(!ret) {
+		printk("%s:%d te_signal test failed ret=%d\n",__func__,__LINE__,ret);
+	}
 	return ret;
 }
 
