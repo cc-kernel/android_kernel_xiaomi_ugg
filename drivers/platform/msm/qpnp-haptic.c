@@ -1,4 +1,5 @@
 /* Copyright (c) 2014-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -532,7 +533,7 @@ static int qpnp_hap_mod_enable(struct qpnp_hap *hap, int on)
 		return rc;
 
 	hap->reg_en_ctl = val;
-
+pr_info("zjl %s  end val == %d\n", __func__, val);
 	return 0;
 }
 
@@ -1797,6 +1798,8 @@ static void qpnp_timed_enable_worker(struct work_struct *work)
 		hrtimer_cancel(&hap->auto_res_err_poll_timer);
 
 	hrtimer_cancel(&hap->hap_timer);
+
+
 
 	if (value == 0) {
 		if (hap->state == 0) {
