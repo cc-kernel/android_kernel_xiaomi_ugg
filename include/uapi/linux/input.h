@@ -162,9 +162,11 @@ struct input_keymap_entry {
 
 #define EVIOCSCLOCKID		_IOW('E', 0xa0, int)			/* Set clockid to be used for timestamps */
 
-/*
+/* KEY_ANT_CONNECT */
 #define KEY_ANT_CONNECT         0x292
 #define KEY_ANT_UNCONNECT       0x293
+
+/*
  * IDs.
  */
 
